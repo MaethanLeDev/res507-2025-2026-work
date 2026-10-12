@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  fast-checks:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -29,6 +29,14 @@ jobs:
         run: |
           node --check app.js
           node --check server.js
+
+  container-validation:
+    needs: fast-checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
 
       - name: Build Docker image
         working-directory: labs/20-containerized-node-app
